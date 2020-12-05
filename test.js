@@ -10,10 +10,12 @@ const optsGetFile = {
   method: "get",
   url: "http://localhost:7001/download",
   responseType: "stream",
+  maxBodyLength: 30 * 1024 * 1024,
 };
 const optsUploadFile = {
   method: "post",
   url: "http://localhost:7001/upload",
+  maxBodyLength: 30 * 1024 * 1024,
 };
 
 app.post("/record", (req, res) => {
