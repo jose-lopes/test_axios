@@ -2,7 +2,7 @@
 
 #### Describe the bug
 
-I observe a memory leak when I pipe two requests with file and get the error "Request body larger than maxBodyLength limit"
+I observe a memory leak when I pipe two requests with file and I get the error "Request body larger than maxBodyLength limit"
 
 #### To Reproduce
 
@@ -26,28 +26,27 @@ axios(optsGetFile)
   })
 
 ```
-
+The entire test code is present at [https://github.com/jose-lopes/test_axios](https://github.com/jose-lopes/test_axios) .
 Next I will describe the environment that I setup to reproduce the problem.
 
-* Start fake server
+* Start fake server. (This program serve /upload and /download (20MB) requests)
 
 ```
 node test_fakeserver.js
 ```
 
-* Start test server and monitor memory with [memory-profiler](https://pypi.org/project/memory-profiler/)
+* Start test server and monitor memory with [memory-profiler](https://pypi.org/project/memory-profiler/). (This program serve /record request, which it get /download and post to /upload)
 
 ```
 mprof run node test.js
 ```
 
-* execute 20 test requests with interval of 30 seconds
+* execute 20 /record requests with interval of 30 seconds
 
 ```
 for test in $(seq 1 20); do curl -X POST localhost:7000/record; sleep 30; done
 ```
 
-All test code is present at https://github.com/jose-lopes/test_axios
 
 The execution produces the next graph:
 
@@ -55,7 +54,7 @@ The execution produces the next graph:
 
 #### Expected behavior
 
-I was expected no memory leak even we got the error "Request body larger than maxBodyLength limit".
+I expected no memory leak even we got the error "Request body larger than maxBodyLength limit".
 I executed again the test with option maxBodyLength: 30*1024*1024 and got the next graph without memory leak.
 
 ![Test Result](https://raw.githubusercontent.com/jose-lopes/test_axios/master/images/testExpected.png)
