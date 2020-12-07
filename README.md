@@ -2,7 +2,7 @@
 
 #### Describe the bug
 
-I observe a memory leak when I pipe two requests with file and I get the error "Request body larger than maxBodyLength limit"
+I observe a memory leak when I request a file and pipe to another request and I get the error "Request body larger than maxBodyLength limit"
 
 #### To Reproduce
 
@@ -47,19 +47,26 @@ mprof run node test.js
 for test in $(seq 1 20); do curl -X POST localhost:7000/record; sleep 30; done
 ```
 
+* Stop test server and execute mprof plot to check memory behavior.
 
-The execution produces the next graph:
+```
+mprof plot
+```
 
-![Test Result](https://raw.githubusercontent.com/jose-lopes/test_axios/master/images/test.png)
 
 #### Expected behavior
 
-I expected no memory leak even we got the error "Request body larger than maxBodyLength limit".
-I executed again the test with option maxBodyLength: 30*1024*1024 and got the next graph without memory leak.
+I expected no memory leak even when we got the error "Request body larger than maxBodyLength limit".
+I executed again the test server with option maxBodyLength: 30*1024*1024 and I got no memory leak.
 
-![Test Result](https://raw.githubusercontent.com/jose-lopes/test_axios/master/images/testExpected.png)
 
 #### Environment
  - Axios Version: 0.21.0
  - Node.js Version: v14.15.0
  - OS: Arch Linux
+
+#### Additional context/Screenshots
+
+Graph when I execute to reproduce:
+![Test Result](https://raw.githubusercontent.com/jose-lopes/test_axios/master/images/test.png)
+
